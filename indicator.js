@@ -38,6 +38,7 @@ class IndicatorMailMenuItem extends PopupMenu.PopupBaseMenuItem {
 		
 		this._extension = extension;
 		this._mailID = null;
+		this._mailAccount = null;
 		this._dateLabel = null;
 		this._iconBin = null;
 		this._closeButton = null;
@@ -47,8 +48,10 @@ class IndicatorMailMenuItem extends PopupMenu.PopupBaseMenuItem {
 		let [subject, ]		= mail['subject'].get_string();
 		let [mailID, ]		= mail['id'].get_string();
 		let datetime		= mail['datetime'].get_int32();
+		let [account, ]		= mail['account_name'].get_string();
 		
 		this._mailID = mailID;
+		this._mailAccount = account;
 		
 		if (sender.length == 0) sender = senderAddr;
 		
@@ -116,14 +119,14 @@ class IndicatorMailMenuItem extends PopupMenu.PopupBaseMenuItem {
 	}
 	
 	_onButtonReleaseEvent(actor, event) {
-		Utils.openDefaultMailReader();
+		Utils.openDefaultMailReader(this._mailAccount);
 		this.activate(event);
 		return Clutter.EVENT_STOP;
 	}
 
 	_onTouchEvent(actor, event) {
 		if (event.type() == Clutter.EventType.TOUCH_END) {
-			Utils.openDefaultMailReader();
+			Utils.openDefaultMailReader(this._mailAccount);
 			this.activate(event);
 			return Clutter.EVENT_STOP;
 		}
@@ -134,7 +137,7 @@ class IndicatorMailMenuItem extends PopupMenu.PopupBaseMenuItem {
 		let symbol = event.get_key_symbol();
 
 		if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
-			Utils.openDefaultMailReader();
+			Utils.openDefaultMailReader(this._mailAccount);
 			this.activate(event);
 			return Clutter.EVENT_STOP;
 		} else if (symbol == Clutter.KEY_Delete) {

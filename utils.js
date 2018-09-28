@@ -19,6 +19,7 @@
 */
 
 const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const Shell = imports.gi.Shell;
 
 function launchApp(desktop_file) {
@@ -28,7 +29,7 @@ function launchApp(desktop_file) {
 		app.activate();
 }
 
-function openDefaultMailReader() {
+function openDefaultMailReader(account) {
 	// Get default application for emails.
 	let appInfo = Gio.AppInfo
 		.get_default_for_type("x-scheme-handler/mailto", false);
@@ -36,5 +37,13 @@ function openDefaultMailReader() {
 	if (appInfo != null) {
 		// Run default email application.
 		launchApp(appInfo.get_id());
+	} else {
+		// Run default browser.
+		// Must name your acount with valid web mail URL;
+		// ... e.g. https://mail.google.com/
+		GLib.spawn_async(
+			// params: workingDirectory, argv, envp, flags, childSetup
+			null, ["/usr/bin/env", "xdg-open", account], null, 0, null
+		);
 	}
 }
