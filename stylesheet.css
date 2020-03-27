@@ -23,6 +23,8 @@
     font-size: 6pt;
     min-width: 14px;
     min-height: 14px;
+    /* -mailnag-counter-overlap-x: -4px;
+    -mailnag-counter-overlap-y: -8px; */
 }
 
 .menu-item-box {
